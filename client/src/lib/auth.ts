@@ -1,17 +1,17 @@
-import { DefaultSession, NextAuthOptions, getServerSession } from 'next-auth';
-import { db } from './db';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import GoogleProvider from 'next-auth/providers/google';
+import { DefaultSession, NextAuthOptions, getServerSession } from "next-auth";
+import { db } from "./db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import GoogleProvider from "next-auth/providers/google";
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-    } & DefaultSession['user'];
+    } & DefaultSession["user"];
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   interface JWT {
     id: string;
   }
@@ -19,7 +19,7 @@ declare module 'next-auth/jwt' {
 
 export const authOptions: NextAuthOptions = {
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
     jwt: async ({ token }) => {
@@ -45,6 +45,7 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET as string,
   adapter: PrismaAdapter(db),
+  // auth
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
