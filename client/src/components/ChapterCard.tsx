@@ -1,12 +1,13 @@
-'use client';
-import { cn } from '@/lib/utils';
-import { Chapter } from '@prisma/client';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+"use client";
+import { cn } from "@/lib/utils";
+import { Chapter } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
-import { useToast } from './ui/use-toast';
-import { Loader2 } from 'lucide-react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useToast } from "./ui/use-toast";
+import { Loader2 } from "lucide-react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { Elsie_Swash_Caps } from "next/font/google";
 
 type ChapterCardProps = {
   chapter: Chapter;
@@ -25,7 +26,7 @@ const ChapterCard = forwardRef<ChapterCardHandler, ChapterCardProps>(
     const [success, setSuccess] = useState<boolean | null>(null);
     const { mutate: getChapterInfo, isPending } = useMutation({
       mutationFn: async () => {
-        const response = await axios.post('/api/chapter/getInfo', {
+        const response = await axios.post("/api/chapter/getInfo", {
           chapterId: chapter.id,
         });
         return response.data;
@@ -42,7 +43,7 @@ const ChapterCard = forwardRef<ChapterCardHandler, ChapterCardProps>(
     }, [chapter.id, setCompletedChapters]);
 
     useEffect(() => {
-      if (chapter.videoId) {
+      if (chapter.videoId || chapter.summary) {
         setSuccess(true);
         addChapterIdToSet;
       }
@@ -50,7 +51,7 @@ const ChapterCard = forwardRef<ChapterCardHandler, ChapterCardProps>(
 
     useImperativeHandle(ref, () => ({
       async triggerLoad() {
-        if (chapter.videoId) {
+        if (chapter.videoId || chapter.summary) {
           addChapterIdToSet();
           return;
         }
@@ -63,9 +64,9 @@ const ChapterCard = forwardRef<ChapterCardHandler, ChapterCardProps>(
             console.error(error);
             setSuccess(false);
             toast({
-              title: 'Error',
-              description: 'There was an error loading your chapter',
-              variant: 'destructive',
+              title: "Error",
+              description: "There was an error loading your chapter",
+              variant: "destructive",
             });
             addChapterIdToSet();
           },
@@ -76,10 +77,10 @@ const ChapterCard = forwardRef<ChapterCardHandler, ChapterCardProps>(
     return (
       <div
         key={chapter.id}
-        className={cn('px-4 py-2 mt-2 rounded flex justify-between', {
-          'bg-secondary': success === null,
-          'bg-red-500': success === false,
-          'bg-green-500': success === true,
+        className={cn("px-4 py-2 mt-2 rounded flex justify-between", {
+          "bg-secondary": success === null,
+          "bg-red-500": success === false,
+          "bg-green-500": success === true,
         })}
       >
         <h5>{chapter.name}</h5>
@@ -89,6 +90,6 @@ const ChapterCard = forwardRef<ChapterCardHandler, ChapterCardProps>(
   },
 );
 
-ChapterCard.displayName = 'ChapterCard';
+ChapterCard.displayName = "ChapterCard";
 
 export default ChapterCard;

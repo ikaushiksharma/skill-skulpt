@@ -1,10 +1,11 @@
-import { db } from '@/lib/db';
-import { strict_output } from '@/lib/gpt';
-import { getQuestionsFromTranscript, getTranscript, searchYoutube } from '@/lib/youtube';
-import { NextResponse } from 'next/server';
-import { resolve } from 'path';
-import { z } from 'zod';
-
+import { db } from "@/lib/db";
+import { strict_output } from "@/lib/gpt";
+import { getQuestionsFromTranscript, searchYoutube } from "@/lib/youtube";
+import { strict } from "assert";
+import { NextResponse } from "next/server";
+import { resolve } from "path";
+import { z } from "zod";
+const { getChapterInfo } = require("@/lib/gpt");
 // api/chapter/getInfo
 
 // sleep for 0-4 seconds to simulate async behavior of real world api calls to database etc.
@@ -35,7 +36,7 @@ export async function POST(req: Request, res: Response) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Chapter not found',
+          error: "Chapter not found",
         },
         {
           status: 404,
@@ -44,22 +45,23 @@ export async function POST(req: Request, res: Response) {
     }
 
     // Get Youtube Video Id from Youtube Search Query
-    const videoId = await searchYoutube(chapter.youtubeSearchQuery);
 
-    // Get Transcript from Youtube Video Id
-    let videoTranscript = await getTranscript(videoId);
+    const videoId = await searchYoutube(chapter.youtubeSearchQuery)
+      .then((videoId) => {
+        return videoId;
+      })
+      .catch((error) => {
+        return "";
+      });
+    console.log("CHAPTER NAME😶‍🌫️😶‍🌫️", chapter.youtubeSearchQuery);
+    // const { result }: { result: string } = await strict_output(
+    //   "You are an AI capable of generating a article about a topic",
+    //   "Write an article in 300 words or less on the topic of " + chapter.youtubeSearchQuery,
+    //   { result: "article on given topic" },
+    // );
+    const result = await getChapterInfo(chapter.name);
 
-    // Getting summary from transcript using GPT-3 API (OpenAI) and returning it in the response (strict_output is a helper function to make the API call to GPT-3) (see lib/gpt.ts)
-    let maxLength = 500;
-    videoTranscript = videoTranscript.split(' ').slice(0, maxLength).join(' ');
-    const { summary }: { summary: string } = await strict_output(
-      'You are an AI capable of summarising a youtube transcript',
-      'summarise in 250 words or less and do not talk of the sponsors or anything unrelated to the main topic, also do not introduce what the summary is about.\n' +
-        videoTranscript,
-      { summary: 'summary of the transcript' },
-    );
-
-    const questions = await getQuestionsFromTranscript(videoTranscript, chapter.name);
+    const questions = await getQuestionsFromTranscript(result, chapter.youtubeSearchQuery);
 
     // create questions in database
     await db.question.createMany({
@@ -83,7 +85,7 @@ export async function POST(req: Request, res: Response) {
       },
       data: {
         videoId,
-        summary,
+        summary: result,
       },
     });
 
@@ -105,7 +107,7 @@ export async function POST(req: Request, res: Response) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Something went wrong',
+          error: "Something went wrong",
         },
         {
           status: 500,

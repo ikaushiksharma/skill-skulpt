@@ -27,17 +27,17 @@ const Navbar = async (props: Props) => {
           </Link>
           {session?.user && (
             <>
-              <Link href="/create" className="mr-3 ">
+              <Link href="/create" className="mr-3 flex">
                 <FilePlus2 size={22} />
                 Create Course
               </Link>
-              <Link href="/settings" className="mr-3">
+              <Link href="/settings" className="mr-3 flex">
                 <SlidersHorizontal />
                 Settings
               </Link>
             </>
           )}
-          <ThemeToggle className="mr-3" />
+          <ThemeToggle className="mr-3 flex" />
           <div className="flex items-center ml-8">
             {session?.user ? <UserAccountNav user={session.user} /> : <SignInButton />}
           </div>

@@ -17,7 +17,7 @@ export async function strict_output(
   model: string = "gpt-3.5-turbo-1106",
   temperature: number = 1,
   num_tries: number = 3,
-  verbose: boolean = false,
+  verbose: boolean = true,
 ) {
   const list_input: boolean = Array.isArray(user_prompt);
   const dynamic_elements: boolean = /<.*?>/.test(JSON.stringify(output_format));
@@ -117,4 +117,23 @@ export async function strict_output(
   }
 
   return [];
+}
+
+export async function getChapterInfo(chapter_title: string) {
+  const response = await openai.chat.completions.create({
+    temperature: 1,
+    model: "gpt-3.5-turbo-1106",
+    messages: [
+      {
+        role: "user",
+        content:
+          "You are an AI capable of generating a article about a topic. Write an article in 300 words or less on the topic of " +
+          chapter_title,
+      },
+    ],
+  });
+  console.log("RESPONSE", response);
+  let res: string = response.choices[0].message?.content?.replace(/'/g, "`") ?? "";
+  console.log(res);
+  return res;
 }
