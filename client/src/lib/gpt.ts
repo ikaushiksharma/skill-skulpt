@@ -46,6 +46,7 @@ export async function strict_output(
 
     const response = await openai.chat.completions.create({
       temperature: temperature,
+      max_tokens: 500,
       model: model,
       messages: [
         {
@@ -123,6 +124,7 @@ export async function getChapterInfo(chapter_title: string) {
   const response = await openai.chat.completions.create({
     temperature: 1,
     model: "gpt-3.5-turbo-1106",
+    max_tokens: 500,
     messages: [
       {
         role: "user",

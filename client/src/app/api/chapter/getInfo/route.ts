@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { strict_output } from "@/lib/gpt";
-import { getQuestionsFromTranscript, searchYoutube } from "@/lib/youtube";
+import { getQuestionsFromTranscript, getTranscript, searchYoutube } from "@/lib/youtube";
 import { strict } from "assert";
 import { NextResponse } from "next/server";
 import { resolve } from "path";
@@ -59,9 +59,20 @@ export async function POST(req: Request, res: Response) {
     //   "Write an article in 300 words or less on the topic of " + chapter.youtubeSearchQuery,
     //   { result: "article on given topic" },
     // );
-    const result = await getChapterInfo(chapter.name);
+    // const result = await getChapterInfo(chapter.name);
+    const result = await getTranscript(videoId);
 
-    const questions = await getQuestionsFromTranscript(result, chapter.youtubeSearchQuery);
+    console.log("🙌🙌VIDEOS FOUND FOR", chapter.name);
+    const questions = await getQuestionsFromTranscript(result, chapter.youtubeSearchQuery)
+      .then((data) => {
+        return data;
+      })
+      .catch((error) => {
+        console.log(error);
+        return [];
+      });
+
+    console.log("🤷‍♂️🤷‍♂️QUESTIONS FOUND FOR", chapter.name);
 
     // create questions in database
     await db.question.createMany({
@@ -76,6 +87,8 @@ export async function POST(req: Request, res: Response) {
         };
       }),
     });
+
+    console.log("🦄🦄questions saved to db ");
 
     // Update Chapter in Database with videoId and summary
 

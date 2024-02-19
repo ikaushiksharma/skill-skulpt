@@ -4,13 +4,14 @@ import { strict_output } from "./gpt";
 
 export async function searchYoutube(searchQuery: string) {
   // hello world --> hello+world
-  // searchQuery = encodeURIComponent(searchQuery);
+  searchQuery = encodeURIComponent(searchQuery);
   try {
     const { data } = await axios.get(
       `https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_API_KEY}&q=${searchQuery}&videoEmbeddable=true&type=video&maxResults=1`,
     );
     return data.items[0].id.videoId;
-  } catch {
+  } catch (error) {
+    console.log("YOUTUBE API ERROR⭕", error);
     return null;
   }
 }
