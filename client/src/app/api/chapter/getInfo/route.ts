@@ -70,12 +70,11 @@ export async function POST(req: Request, res: Response) {
         return [];
       });
 
-
     // create questions in database
     await db.question.createMany({
       data: questions.map((question) => {
         let options = [question.answer, question.option1, question.option2, question.option3];
-        options = options.sort(() => Math.random() - 0.5); // shuffle the options array randomly (see https://stackoverflow.com/a/2450976/13697995)
+        options = options.sort(() => Math.random() - 0.5);
         return {
           question: question.question,
           answer: question.answer,
@@ -84,7 +83,6 @@ export async function POST(req: Request, res: Response) {
         };
       }),
     });
-
 
     // Update Chapter in Database with videoId and summary
 
