@@ -62,7 +62,6 @@ export async function POST(req: Request, res: Response) {
     // const result = await getChapterInfo(chapter.name);
     const result = await getTranscript(videoId);
 
-    console.log("🙌🙌VIDEOS FOUND FOR", chapter.name);
     const questions = await getQuestionsFromTranscript(result, chapter.youtubeSearchQuery)
       .then((data) => {
         return data;
@@ -72,7 +71,6 @@ export async function POST(req: Request, res: Response) {
         return [];
       });
 
-    console.log("🤷‍♂️🤷‍♂️QUESTIONS FOUND FOR", chapter.name);
 
     // create questions in database
     await db.question.createMany({
@@ -88,7 +86,6 @@ export async function POST(req: Request, res: Response) {
       }),
     });
 
-    console.log("🦄🦄questions saved to db ");
 
     // Update Chapter in Database with videoId and summary
 
