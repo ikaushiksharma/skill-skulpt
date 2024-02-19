@@ -53,7 +53,6 @@ export async function POST(req: Request, res: Response) {
       .catch((error) => {
         return "";
       });
-    console.log("CHAPTER NAME😶‍🌫️😶‍🌫️", chapter.youtubeSearchQuery);
     // const { result }: { result: string } = await strict_output(
     //   "You are an AI capable of generating a article about a topic",
     //   "Write an article in 300 words or less on the topic of " + chapter.youtubeSearchQuery,
