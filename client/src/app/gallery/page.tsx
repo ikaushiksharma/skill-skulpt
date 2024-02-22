@@ -1,7 +1,7 @@
-import GalleryCourseCard from '@/components/GalleryCourseCard';
-import { db } from '@/lib/db';
-import Link from 'next/link';
-import React from 'react';
+import GalleryCourseCard from "@/components/GalleryCourseCard";
+import { db } from "@/lib/db";
+import Link from "next/link";
+import React from "react";
 
 interface GalleryPageProps {}
 const GalleryPage = async ({}: GalleryPageProps) => {
@@ -18,7 +18,11 @@ const GalleryPage = async ({}: GalleryPageProps) => {
     },
   });
   return (
-    <div className="py-8 mx-auto max-w-7xl">
+    <div className="mx-auto max-w-7xl">
+      <h1 className="self-center mb-16 text-3xl font-bold text-center sm:text-6xl">
+        Our Curated Courses
+      </h1>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center">
         {courses.map((course) => {
           return <GalleryCourseCard course={course} key={course.id} />;

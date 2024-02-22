@@ -1,7 +1,6 @@
 "use client";
 
 import { createChaptersSchema } from "@/lib/validators/course";
-import { FC } from "react";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { useForm } from "react-hook-form";
@@ -16,14 +15,10 @@ import axios from "axios";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 
-interface CreateCourseFormProps {
-  isPro?: boolean;
-}
-
 // creating type from zod object
 type formSchema = z.infer<typeof createChaptersSchema>;
 
-const CreateCourseForm: FC<CreateCourseFormProps> = ({ isPro = false }: CreateCourseFormProps) => {
+const CreateCourseForm = () => {
   //!  Basics of React query
   //   Mutations are functions that allow you to modify data on the server.
   //   They're called mutations because they mutate data.
