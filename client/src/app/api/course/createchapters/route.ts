@@ -3,7 +3,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { strict_output } from "@/lib/gpt";
-import { checkSubscription } from "@/lib/subscription";
 import { getUnsplashImage } from "@/lib/unsplash";
 import { createChaptersSchema } from "@/lib/validators/course";
 import { NextResponse } from "next/server";
@@ -17,10 +16,6 @@ export async function POST(req: Request, res: Response) {
       return new NextResponse("Unauthorised", { status: 401 });
     }
 
-    const isPro = await checkSubscription();
-    if (session.user.credits <= 0 && !isPro) {
-      return new NextResponse("Not subscribed or No credits left", { status: 402 });
-    }
     const body = await req.json();
     // parsing the body with zod validators
     const { title, units } = createChaptersSchema.parse(body);
@@ -62,6 +57,8 @@ export async function POST(req: Request, res: Response) {
     // Now create the course in the database
     const course = await db.course.create({
       data: {
+        authorId: session.user.id,
+
         name: title,
         image: course_image,
       },
@@ -85,14 +82,15 @@ export async function POST(req: Request, res: Response) {
       });
     }
 
-    // Now update the user credits
     await db.user.update({
       where: {
         id: session.user.id,
       },
       data: {
-        credits: {
-          decrement: 1,
+        courses: {
+          connect: {
+            id: course.id,
+          },
         },
       },
     });
