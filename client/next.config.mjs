@@ -15,6 +15,9 @@ const nextConfig = {
         protocol: "https",
         hostname: "aceternity.com",
       },
+      {
+        hostname: "cdn.cosmicjs.com",
+      },
     ],
   },
 };

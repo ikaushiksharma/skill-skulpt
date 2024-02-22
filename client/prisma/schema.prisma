@@ -43,8 +43,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  credits       Int       @default(10)
-
+  courses       Course[]
   accounts Account[]
   sessions Session[]
 }
@@ -55,6 +54,8 @@ model Course {
   name  String
   image String
   units Unit[]
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
 }
 
 // unit contains many chapters
@@ -65,22 +66,33 @@ model Unit {
   name     String
   course   Course    @relation(fields: [courseId], references: [id])
   chapters Chapter[]
-
   @@index([courseId], name: "courseId")
 }
 
 model Chapter {
   id     String @id @default(cuid()) @map("_id")
   unitId String
-
   name               String
   youtubeSearchQuery String
   videoId            String?
   summary            String?
   unit               Unit       @relation(fields: [unitId], references: [id])
   questions          Question[]
-
+  userProgress       UserProgress[]
   @@index([unitId], name: "unitId")
+}
+
+
+model UserProgress {
+  id String @id @default(uuid()) @map("_id")
+  userId String
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  isCompleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([chapterId])
+  @@unique([userId, chapterId])
 }
 
 model Question {
@@ -93,13 +105,4 @@ model Question {
   chapter  Chapter @relation(fields: [chapterId], references: [id])
 
   @@index([chapterId], name: "chapterId")
-}
-
-model UserSubscription {
-  id                     String    @id @default(cuid()) @map("_id")
-  userId                 String    @unique
-  stripeCustomerId       String    @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 }

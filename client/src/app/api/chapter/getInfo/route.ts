@@ -71,18 +71,18 @@ export async function POST(req: Request, res: Response) {
       });
 
     // create questions in database
-    await db.question.createMany({
-      data: questions.map((question) => {
-        let options = [question.answer, question.option1, question.option2, question.option3];
-        options = options.sort(() => Math.random() - 0.5);
-        return {
-          question: question.question,
-          answer: question.answer,
-          options: JSON.stringify(options),
-          chapterId: chapterId,
-        };
-      }),
-    });
+    // await db.question.createMany({
+    //   data: questions.map((question) => {
+    //     let options = [question.answer, question.option1, question.option2, question.option3];
+    //     options = options.sort(() => Math.random() - 0.5);
+    //     return {
+    //       question: question.question,
+    //       answer: question.answer,
+    //       options: JSON.stringify(options),
+    //       chapterId: chapterId,
+    //     };
+    //   }),
+    // });
 
     // Update Chapter in Database with videoId and summary
 

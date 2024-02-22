@@ -1,8 +1,14 @@
 "use client";
-import React from "react";
-import { HeroParallax } from "@/components/home/hero-parallax";
-import { products } from "@/data";
+import React, { useEffect } from "react";
+import Hero from "@/components/home/hero-parallax";
 
 export default function Page() {
-  return <HeroParallax products={products} />;
+  useEffect(() => {
+    (async () => {
+      // @ts-ignore
+      const LocomotiveScroll = (await import("locomotive-scroll")).default;
+      const locomotiveScroll = new LocomotiveScroll();
+    })();
+  }, []);
+  return <Hero />;
 }
