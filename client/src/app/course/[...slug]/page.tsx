@@ -1,6 +1,8 @@
 import CourseSideBar from "@/components/CourseSideBar";
 import MainVideoSummary from "@/components/MainVideoSummary";
+import MarkAsComplete from "@/components/MarkAsComplete";
 import QuizCards from "@/components/QuizCards";
+import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -13,6 +15,7 @@ interface CoursePageProps {
 }
 
 const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
+  const session = await getAuthSession();
   const [courseId, unitIndexParam, chapterIndexParam] = slug;
   const course = await db.course.findUnique({
     where: { id: courseId },
@@ -42,6 +45,7 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
   if (!chapter) {
     return redirect("/gallery");
   }
+  const handleComplete = () => {};
 
   const nextChapter = unit.chapters[chapterIndex + 1];
   const prevChapter = unit.chapters[chapterIndex - 1];
@@ -74,9 +78,9 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
               unit={unit}
               unitIndex={unitIndex}
             />
-            <QuizCards chapter={chapter} />
+            {/* <QuizCards chapter={chapter} /> */}
           </div>
-          <div className="flex-[1] h-[1px] mt-4 text-gray-500 bg-gray-500" />
+          <div className="flex-[1] flex flex-col h-[1px] mt-4 text-gray-500 bg-gray-500" />
           <div className="flex pb-8">
             {prevChapter && (
               <Link
@@ -108,6 +112,7 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
               </Link>
             )}
           </div>
+          <MarkAsComplete chapterId={chapter.id} userId={session?.user.id} />
         </div>
       </div>
     </div>

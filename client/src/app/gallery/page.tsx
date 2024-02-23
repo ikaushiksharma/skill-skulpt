@@ -8,6 +8,7 @@ const GalleryPage = async ({}: GalleryPageProps) => {
   // Get all courses details from the database
   const courses = await db.course.findMany({
     include: {
+      author: true,
       units: {
         include: {
           chapters: {
@@ -17,6 +18,7 @@ const GalleryPage = async ({}: GalleryPageProps) => {
       },
     },
   });
+  console.log(courses);
   return (
     <div className="mx-auto max-w-7xl">
       <h1 className="self-center mb-16 text-3xl font-bold text-center sm:text-6xl">

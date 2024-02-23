@@ -78,7 +78,6 @@ model Chapter {
   summary            String?
   unit               Unit       @relation(fields: [unitId], references: [id])
   questions          Question[]
-  userProgress       UserProgress[]
   @@index([unitId], name: "unitId")
 }
 
@@ -95,6 +94,16 @@ model UserProgress {
   @@unique([userId, chapterId])
 }
 
+model CourseProgress{
+  id String @id @default(uuid()) @map("_id")
+  userId      String
+  courseId    String
+  chapters    Chapter[] @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([courseId])
+  @@unique([userId, courseId])
+}
 model Question {
   id        String @id @default(cuid()) @map("_id")
   chapterId String

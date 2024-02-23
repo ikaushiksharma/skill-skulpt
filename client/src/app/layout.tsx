@@ -25,7 +25,6 @@ export default function RootLayout({
       <body className={cn(inter.className, "antialiased min-h-screen")}>
         <Provider>
           <Navbar />
-
           {children}
           <Toaster />
         </Provider>
