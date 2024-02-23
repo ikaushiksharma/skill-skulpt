@@ -130,7 +130,7 @@ const CreateCourseForm = () => {
                   form.setValue("units", [...form.watch("units"), ""]);
                 }}
               >
-                <Plus className="w-4 h-4 ml-2 text-green-500" />
+                <Plus className="w-4 h-4 ml-2 text-purple-500" />
                 Add Unit
               </Button>
 
@@ -142,7 +142,7 @@ const CreateCourseForm = () => {
                   form.setValue("units", [...form.watch("units").slice(0, -1)]);
                 }}
               >
-                <Trash className="w-4 h-4 ml-2 text-green-500" />
+                <Trash className="w-4 h-4 ml-2 text-purple-500" />
                 Remove Unit
               </Button>
             </div>

@@ -1,11 +1,14 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
 import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/navbar-menu";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import { getAuthSession } from "@/lib/auth";
+import SignInButton from "./SignInButton";
+import UserAccountNav from "./UserAccountNav";
 
-export default function Navbar({ className }: { className?: string }) {
-  const [active, setActive] = useState<string | null>(null);
+export default async function Navbar({ className }: { className?: string }) {
+  const session = await getAuthSession();
+
   return (
     <div
       className={cn(
@@ -13,13 +16,15 @@ export default function Navbar({ className }: { className?: string }) {
         className,
       )}
     >
-      <Menu setActive={setActive}>
+      <Menu>
         <div>Logo here</div>
 
         <div className="flex items-center space-x-12 justify-center">
           <MenuItem item={<HoveredLink href="/create">Create Course</HoveredLink>}></MenuItem>
           <MenuItem item={<HoveredLink href="/gallery">Explore Courses</HoveredLink>}></MenuItem>
-          <MenuItem item={<HoveredLink href="/profile">User Profile</HoveredLink>}></MenuItem>
+          <MenuItem
+            item={session?.user ? <UserAccountNav user={session.user} /> : <SignInButton />}
+          ></MenuItem>
           <MenuItem item={<ThemeToggle />}></MenuItem>
         </div>
       </Menu>
