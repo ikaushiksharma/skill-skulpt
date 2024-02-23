@@ -37,7 +37,7 @@ const cardData: CardProps[] = [
 type BarChartProps = { name: string; total: number[] };
 
 async function getData(id: string) {
-  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL =process.env.NEXTAUTH_URL;
   try {
     const { data } = await axios.get(`/api/user/${id}`);
     return data;
