@@ -112,7 +112,7 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
               </Link>
             )}
           </div>
-          <MarkAsComplete chapterId={chapter.id} userId={session?.user.id} />
+          <MarkAsComplete courseId={course.id} chapterId={chapter.id} userId={session?.user.id} />
         </div>
       </div>
     </div>

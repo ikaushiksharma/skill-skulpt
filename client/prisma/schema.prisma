@@ -15,11 +15,11 @@ model Account {
   provider          String
   providerAccountId String
   refresh_token     String?
-  access_token      String? 
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? 
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -38,24 +38,26 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  courses       Course[]
-  accounts Account[]
-  sessions Session[]
+  id             String           @id @default(cuid()) @map("_id")
+  name           String?
+  email          String?          @unique
+  emailVerified  DateTime?
+  image          String?
+  courses        Course[]
+  courseProgress CourseProgress[]
+  accounts       Account[]
+  sessions       Session[]
 }
 
 // course contains many units
 model Course {
-  id    String @id @default(cuid()) @map("_id")
-  name  String
-  image String
-  units Unit[]
-  authorId String
-  author User @relation(fields: [authorId], references: [id])
+  id            String @id @default(cuid()) @map("_id")
+  name          String
+  image         String
+  totalChapters Int
+  units         Unit[]
+  authorId      String
+  author        User   @relation(fields: [authorId], references: [id])
 }
 
 // unit contains many chapters
@@ -66,51 +68,43 @@ model Unit {
   name     String
   course   Course    @relation(fields: [courseId], references: [id])
   chapters Chapter[]
+
   @@index([courseId], name: "courseId")
 }
 
 model Chapter {
-  id     String @id @default(cuid()) @map("_id")
-  unitId String
+  id                 String     @id @default(cuid()) @map("_id")
+  unitId             String
   name               String
   youtubeSearchQuery String
   videoId            String?
   summary            String?
   unit               Unit       @relation(fields: [unitId], references: [id])
   questions          Question[]
+
   @@index([unitId], name: "unitId")
 }
 
-
-model UserProgress {
-  id String @id @default(uuid()) @map("_id")
-  userId String
-  chapterId String
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  isCompleted Boolean @default(false)
+model CourseProgress {
+  id        String   @id @default(uuid()) @map("_id")
+  userId    String
+  courseId  String
+  chapters  String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@index([chapterId])
-  @@unique([userId, chapterId])
+  User      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, courseId])
+  @@index([courseId])
 }
 
-model CourseProgress{
-  id String @id @default(uuid()) @map("_id")
-  userId      String
-  courseId    String
-  chapters    Chapter[] @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  @@index([courseId])
-  @@unique([userId, courseId])
-}
 model Question {
   id        String @id @default(cuid()) @map("_id")
   chapterId String
 
-  question String  
-  answer   String  
-  options  String  
+  question String
+  answer   String
+  options  String
   chapter  Chapter @relation(fields: [chapterId], references: [id])
 
   @@index([chapterId], name: "chapterId")

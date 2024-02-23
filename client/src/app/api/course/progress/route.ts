@@ -3,39 +3,38 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request, res: Response) {
   try {
-    const { chapterId, userId } = await req.json();
+    const { courseId, chapterId, userId } = await req.json();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const findProgress = await db.userProgress.findFirst({
+    const prog = await db.courseProgress.findFirst({
       where: {
         userId,
-        chapterId,
+        courseId,
       },
     });
-    if (findProgress) {
-      return NextResponse.json({ error: "Chapter already marked as completed" }, { status: 409 });
-    }
-    const userProgress = await db.userProgress.create({
-      data: {
-        userId,
-        chapterId,
-        isCompleted: true,
-      },
-    });
-
-    await db.chapter.update({
-      where: { id: chapterId },
-      data: {
-        userProgress: {
-          connect: {
-            id: userProgress.id,
+    if (prog) {
+      const updatedProgress = await db.courseProgress.update({
+        where: {
+          id: prog.id,
+        },
+        data: {
+          chapters: {
+            push: chapterId,
           },
         },
+      });
+      return NextResponse.json({ data: updatedProgress }, { status: 200 });
+    }
+    const courseProgress = await db.courseProgress.create({
+      data: {
+        userId,
+        courseId,
+        chapters: [chapterId],
       },
     });
 
-    return NextResponse.json({ data: userProgress }, { status: 200 });
+    return NextResponse.json({ data: courseProgress }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
   }

@@ -58,7 +58,7 @@ export async function POST(req: Request, res: Response) {
     const course = await db.course.create({
       data: {
         authorId: session.user.id,
-
+        totalChapters: output_units.reduce((acc, unit) => acc + unit.chapters.length, 0),
         name: title,
         image: course_image,
       },
