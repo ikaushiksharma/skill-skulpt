@@ -1,23 +1,23 @@
-import { FC } from 'react';
-import { Chapter, Course, Unit } from '@prisma/client';
-import Link from 'next/link';
-import Image from 'next/image';
+import { FC } from "react";
+import { Chapter, Course, Unit, User } from "@prisma/client";
+import Link from "next/link";
+import Image from "next/image";
 interface GalleryCourseCardProps {
   course: Course & {
+    author: User;
     units: (Unit & {
       chapters: Chapter[];
     })[];
   };
 }
-
 const GalleryCourseCard: FC<GalleryCourseCardProps> = async ({ course }) => {
   return (
     <>
-      <div className="border rounded-lg border-secondary">
+      <div className="border rounded-lg bg-black border-secondary">
         <div className="relative">
           <Link href={`/course/${course.id}/0/0`} className="relative block w-fit">
             <Image
-              src={course.image || ''}
+              src={course.image || ""}
               className="object-cover w-full max-h-[300px] rounded-t-lg"
               width={300}
               height={300}
@@ -34,12 +34,17 @@ const GalleryCourseCard: FC<GalleryCourseCardProps> = async ({ course }) => {
           <div className="space-y-1">
             {course.units.map((unit, unitIndex) => {
               return (
-                <Link href={`/course/${course.id}/${unitIndex}/0`} key={unit.id} className="block underline w-fit">
+                <Link
+                  href={`/course/${course.id}/${unitIndex}/0`}
+                  key={unit.id}
+                  className="block underline w-fit"
+                >
                   {unit.name}
                 </Link>
               );
             })}
           </div>
+          <div>Author: {course.author.name}</div>
         </div>
       </div>
     </>

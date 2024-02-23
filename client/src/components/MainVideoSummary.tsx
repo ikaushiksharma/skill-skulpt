@@ -1,5 +1,5 @@
-import { Chapter, Unit } from '@prisma/client';
-import React from 'react';
+import { Chapter, Unit } from "@prisma/client";
+import React from "react";
 
 type Props = {
   chapter: Chapter;
