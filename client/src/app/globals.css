@@ -75,7 +75,7 @@
   }
 }
 * {
-  /* @apply border border-red-600 */
+  /* @apply border border-red-600; */
 }
 
 *::-webkit-scrollbar {

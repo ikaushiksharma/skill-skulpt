@@ -28,7 +28,7 @@ const CourseSideBar: FC<CourseSideBarProps> = async ({ course, currentChapterId 
                   <Link
                     href={`/course/${course.id}/${unitIndex}/${chapterIndex}`}
                     className={cn('text-secondary-foreground/60', {
-                      'text-green-500 font-bold': chapter.id === currentChapterId,
+                      'text-purple-500 font-bold': chapter.id === currentChapterId,
                     })}
                   >
                     {chapter.name}
