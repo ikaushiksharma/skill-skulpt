@@ -1,10 +1,10 @@
-import CourseSideBar from '@/components/CourseSideBar';
-import MainVideoSummary from '@/components/MainVideoSummary';
-import QuizCards from '@/components/QuizCards';
-import { db } from '@/lib/db';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import CourseSideBar from "@/components/CourseSideBar";
+import MainVideoSummary from "@/components/MainVideoSummary";
+import QuizCards from "@/components/QuizCards";
+import { db } from "@/lib/db";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface CoursePageProps {
   params: {
@@ -28,7 +28,7 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
   });
 
   if (!course) {
-    return redirect('/gallery');
+    return redirect("/gallery");
   }
 
   let unitIndex = parseInt(unitIndexParam);
@@ -36,11 +36,11 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
 
   const unit = course.units[unitIndex];
   if (!unit) {
-    return redirect('/gallery');
+    return redirect("/gallery");
   }
   const chapter = unit.chapters[chapterIndex];
   if (!chapter) {
-    return redirect('/gallery');
+    return redirect("/gallery");
   }
 
   const nextChapter = unit.chapters[chapterIndex + 1];
@@ -68,13 +68,21 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
       <div>
         <div className="ml-[400px] px-8">
           <div className="flex">
-            <MainVideoSummary chapter={chapter} chapterIndex={chapterIndex} unit={unit} unitIndex={unitIndex} />
+            <MainVideoSummary
+              chapter={chapter}
+              chapterIndex={chapterIndex}
+              unit={unit}
+              unitIndex={unitIndex}
+            />
             <QuizCards chapter={chapter} />
           </div>
           <div className="flex-[1] h-[1px] mt-4 text-gray-500 bg-gray-500" />
           <div className="flex pb-8">
             {prevChapter && (
-              <Link href={`/course/${course.id}/${unitIndex}/${chapterIndex - 1}`} className="flex mt-4 mr-auto w-fit">
+              <Link
+                href={`/course/${course.id}/${unitIndex}/${chapterIndex - 1}`}
+                className="flex mt-4 mr-auto w-fit"
+              >
                 <div className="flex items-center">
                   <ChevronLeft className="w-6 h-6 mr-1" />
                   <div className="flex flex-col items-start">
@@ -86,7 +94,10 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
             )}
 
             {nextChapter && (
-              <Link href={`/course/${course.id}/${unitIndex}/${chapterIndex + 1}`} className="flex mt-4 ml-auto w-fit">
+              <Link
+                href={`/course/${course.id}/${unitIndex}/${chapterIndex + 1}`}
+                className="flex mt-4 ml-auto w-fit"
+              >
                 <div className="flex items-center">
                   <div className="flex flex-col items-start">
                     <span className="text-sm text-secondary-foreground/60">Next</span>

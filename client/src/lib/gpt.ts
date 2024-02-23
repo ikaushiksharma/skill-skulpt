@@ -27,7 +27,7 @@ export async function strict_output(
 
   for (let i = 0; i < num_tries; i++) {
     let output_format_prompt: string = `\nYou are to output ${
-      list_output && "an array of objects in"
+      list_output ? "an array of objects in" : ""
     } the following in json format: ${JSON.stringify(
       output_format,
     )}. \nDo not put quotation marks or escape character \\ in the output fields.`;
@@ -56,9 +56,9 @@ export async function strict_output(
         { role: "user", content: user_prompt.toString() },
       ],
     });
-
+    console.log("RESPONSE", response.choices[0].message?.content);
     let res: string = response.choices[0].message?.content?.replace(/'/g, "`") ?? "";
-
+    console.log("RES1", res);
     res = res.replace(/(\w)"(\w)/g, "$1'$2");
     res = res.replace(/(\w)```/g, "$1");
 
