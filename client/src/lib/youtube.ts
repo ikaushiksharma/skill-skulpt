@@ -11,7 +11,6 @@ export async function searchYoutube(searchQuery: string) {
     );
     return data.items[0].id.videoId;
   } catch (error) {
-    console.log("YOUTUBE API ERROR⭕", error);
     return null;
   }
 }
@@ -29,7 +28,6 @@ export async function getTranscript(videoId: string) {
     }
     return transcript.replaceAll("\n", " ");
   } catch (error) {
-    console.log(error);
     return "";
   }
 }

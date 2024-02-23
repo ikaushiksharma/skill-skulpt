@@ -24,14 +24,12 @@ const MarkAsComplete = ({ chapterId, userId, courseId }: MarkAsCompleteProps) =>
       });
       const status = res.status;
       const data = await res.data;
-      console.log("STATUS", status, data);
       toast({
         title: "Success",
         description: "Chapter Marked as Completed",
         variant: "success",
       });
     } catch (error) {
-      console.log("ERROR", error);
       toast({
         title: "Error",
         description: (error as any)?.response?.data?.error || "An error occurred",

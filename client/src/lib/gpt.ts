@@ -56,9 +56,7 @@ export async function strict_output(
         { role: "user", content: user_prompt.toString() },
       ],
     });
-    console.log("RESPONSE", response.choices[0].message?.content);
     let res: string = response.choices[0].message?.content?.replace(/'/g, "`") ?? "";
-    console.log("RES1", res);
     res = res.replace(/(\w)"(\w)/g, "$1'$2");
     res = res.replace(/(\w)```/g, "$1");
 
@@ -134,8 +132,6 @@ export async function getChapterInfo(chapter_title: string) {
       },
     ],
   });
-  console.log("RESPONSE", response);
   let res: string = response.choices[0].message?.content?.replace(/'/g, "`") ?? "";
-  console.log(res);
   return res;
 }

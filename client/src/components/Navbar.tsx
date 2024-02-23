@@ -8,7 +8,6 @@ import UserAccountNav from "./UserAccountNav";
 import Image from "next/image";
 export default async function Navbar({ className }: { className?: string }) {
   const session = await getAuthSession();
-
   return (
     <div
       className={cn(
@@ -18,7 +17,10 @@ export default async function Navbar({ className }: { className?: string }) {
     >
       <Menu>
         <HoveredLink href="/">
-          <img className="h-12 w-48 relative" alt="logo" src="/logo-black.png" />
+          <>
+            <img className="h-10 relative hidden dark:block" alt="logo" src="/logo-black.png" />
+            <img className="h-10 relative dark:hidden" alt="logo" src="/logo-white.png" />
+          </>
         </HoveredLink>
         <div className="flex items-center space-x-12 justify-center">
           <MenuItem item={<HoveredLink href="/create">Create Course</HoveredLink>}></MenuItem>

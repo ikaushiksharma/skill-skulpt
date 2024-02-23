@@ -13,6 +13,9 @@ export async function POST(req: Request, res: Response) {
         courseId,
       },
     });
+    if (prog && prog.chapters.includes(chapterId)) {
+      return NextResponse.json({ error: "Already Completed" }, { status: 401 });
+    }
     if (prog) {
       const updatedProgress = await db.courseProgress.update({
         where: {
@@ -24,6 +27,7 @@ export async function POST(req: Request, res: Response) {
           },
         },
       });
+
       return NextResponse.json({ data: updatedProgress }, { status: 200 });
     }
     const courseProgress = await db.courseProgress.create({

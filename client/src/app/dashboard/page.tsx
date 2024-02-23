@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
+import { DollarSign, Users, CreditCard, Activity, Trophy } from "lucide-react";
 import Card, { CardContent, CardProps } from "@/components/Card";
 import BarChart from "@/components/BarChart";
-import SalesCard, { SalesProps } from "@/components/SalesCard";
+import SalesCard from "@/components/SalesCard";
 import { getAuthSession } from "@/lib/auth";
-import { use, useEffect, useState } from "react";
+import axios from "axios";
+import { redirect } from "next/navigation";
 
 const cardData: CardProps[] = [
   {
@@ -33,38 +34,27 @@ const cardData: CardProps[] = [
   },
 ];
 
-const uesrSalesData: SalesProps[] = [
-  {
-    name: "Olivia Martin",
-    email: "olivia.martin@email.com",
-    saleAmount: "+$1,999.00",
-  },
-  {
-    name: "Jackson Lee",
-    email: "isabella.nguyen@email.com",
-    saleAmount: "+$1,999.00",
-  },
-  {
-    name: "Isabella Nguyen",
-    email: "isabella.nguyen@email.com",
-    saleAmount: "+$39.00",
-  },
-  {
-    name: "William Kim",
-    email: "will@email.com",
-    saleAmount: "+$299.00",
-  },
-  {
-    name: "Sofia Davis",
-    email: "sofia.davis@email.com",
-    saleAmount: "+$39.00",
-  },
-];
 type BarChartProps = { name: string; total: number[] };
+
+async function getData(id: string) {
+  axios.defaults.baseURL = "http://localhost:3000";
+  try {
+    const { data } = await axios.get(`/api/user/${id}`);
+    return data;
+  } catch (error) {
+    console.error("ERROR", error);
+    return null;
+  }
+}
 
 export default async function Home() {
   const session = await getAuthSession();
+  if (!session) redirect("/gallery");
   const name = session?.user.name;
+  console.log("i am here", session?.user.id);
+  const { user, userProgress } = await getData(session?.user.id);
+  console.log("RESPONSE", userProgress);
+
   let firstName = "User";
   if (name) {
     firstName = name.split(" ")[0];
@@ -85,17 +75,23 @@ export default async function Home() {
       </section>
       <section className="grid grid-cols-1  gap-4 transition-all lg:grid-cols-2">
         <CardContent>
-          <p className="p-4 font-semibold">Overview</p>
-
-          <BarChart userId={session?.user.id} />
-        </CardContent>
-        <CardContent className="flex justify-between gap-4">
-          <section>
-            <p>Recent Sales</p>
-            <p className="text-sm text-gray-400">You made 265 sales this month.</p>
+          <section className="pb-6 text-lg">
+            <p>Course Progress</p>
+            <p className="text-base text-gray-400">
+              You are currently enrolled in {userProgress.length} courses
+            </p>
           </section>
-          {uesrSalesData.map((d, i) => (
-            <SalesCard key={i} email={d.email} name={d.name} saleAmount={d.saleAmount} />
+          <BarChart data={userProgress} />
+        </CardContent>
+        <CardContent className="flex gap-4">
+          <section className="pb-6 text-lg">
+            <p>Generated Courses</p>
+            <p className="text-base text-gray-400">
+              You have generated {user.courses.length} courses. Keep it up!
+            </p>
+          </section>
+          {user.courses.map((d: any, i: number) => (
+            <SalesCard key={i} id={d.id} name={d.name} saleAmount={d.totalChapters} />
           ))}
         </CardContent>
 

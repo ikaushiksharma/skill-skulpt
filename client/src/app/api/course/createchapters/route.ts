@@ -50,13 +50,11 @@ export async function POST(req: Request, res: Response) {
         image_search_term: "a good search term for the title of the course",
       },
     );
-    console.log("IMAGE", imageSearchTerm);
     const course_image = await getUnsplashImage(imageSearchTerm.image_search_term);
-    console.log(course_image);
     // return NextResponse.json({ course_image });
     // Now create the course in the database
     const course = await db.course.create({
-      data: {
+      data: { 
         authorId: session.user.id,
         totalChapters: output_units.reduce((acc, unit) => acc + unit.chapters.length, 0),
         name: title,

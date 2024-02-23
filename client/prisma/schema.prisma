@@ -51,20 +51,20 @@ model User {
 
 // course contains many units
 model Course {
-  id            String @id @default(cuid()) @map("_id")
-  name          String
-  image         String
-  totalChapters Int
-  units         Unit[]
-  authorId      String
-  author        User   @relation(fields: [authorId], references: [id])
+  id              String @id @default(cuid()) @map("_id")
+  name            String
+  image           String
+  totalChapters   Int
+  units           Unit[]
+  authorId        String
+  CourseProgress  CourseProgress[]
+  author          User   @relation(fields: [authorId], references: [id])
 }
 
 // unit contains many chapters
 model Unit {
   id       String @id @default(cuid()) @map("_id")
   courseId String
-
   name     String
   course   Course    @relation(fields: [courseId], references: [id])
   chapters Chapter[]
@@ -89,6 +89,7 @@ model CourseProgress {
   id        String   @id @default(uuid()) @map("_id")
   userId    String
   courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
   chapters  String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
