@@ -1,4 +1,6 @@
 import { db } from "@/lib/db";
+import { sendMail } from "@/lib/mail-sender";
+import { progress } from "framer-motion";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request, res: Response) {
@@ -16,8 +18,10 @@ export async function POST(req: Request, res: Response) {
     if (prog && prog.chapters.includes(chapterId)) {
       return NextResponse.json({ error: "Already Completed" }, { status: 401 });
     }
+    const course = await db.course.findFirst({ where: { id: courseId } });
+    let progress;
     if (prog) {
-      const updatedProgress = await db.courseProgress.update({
+      progress = await db.courseProgress.update({
         where: {
           id: prog.id,
         },
@@ -27,18 +31,28 @@ export async function POST(req: Request, res: Response) {
           },
         },
       });
-
-      return NextResponse.json({ data: updatedProgress }, { status: 200 });
+    } else {
+      progress = await db.courseProgress.create({
+        data: {
+          userId,
+          courseId,
+          chapters: [chapterId],
+        },
+      });
     }
-    const courseProgress = await db.courseProgress.create({
-      data: {
-        userId,
-        courseId,
-        chapters: [chapterId],
-      },
-    });
 
-    return NextResponse.json({ data: courseProgress }, { status: 200 });
+    if (course?.totalChapters === progress.chapters.length) {
+      const user = await db.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      console.log("SENDING MAIL");
+      await sendMail(user?.email + "", userId, courseId);
+      console.log("SENT MAIL");
+    }
+
+    return NextResponse.json({ data: progress }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
