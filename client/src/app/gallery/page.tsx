@@ -19,12 +19,13 @@ const GalleryPage = async ({}: GalleryPageProps) => {
     },
   });
   return (
-    <div className="mx-auto max-w-7xl">
-      <h1 className="self-center mb-16 text-3xl font-bold text-center sm:text-6xl">
-        Our Curated Courses
-      </h1>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+    <div className="mx-auto h-[100dvh] overflow-hidden py-24 max-w-screen-xl">
+      <div className="sticky z-20 w-full">
+        <h1 className="w-full py-12 text-3xl text-center font-bold sm:text-6xl">
+          Our Curated Courses
+        </h1>
+      </div>
+      <div className="grid overflow-scroll h-full grid-cols-1 md:gap-12 sm:grid-cols-2 md:grid-cols-3">
         {courses.map((course) => {
           return <GalleryCourseCard course={course} key={course.id} />;
         })}
