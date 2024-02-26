@@ -24,7 +24,7 @@ const GalleryPage = async ({}: GalleryPageProps) => {
         Our Curated Courses
       </h1>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
         {courses.map((course) => {
           return <GalleryCourseCard course={course} key={course.id} />;
         })}
