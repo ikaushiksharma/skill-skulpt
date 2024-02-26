@@ -32,7 +32,7 @@ export default function SalesCard(props: SalesProps) {
           <p>{props.name}</p>
         </div>
       </section>
-      <p className="text-base text-zinc-100">{props.saleAmount}</p>
+      <p className="text-base text-black dark:text-zinc-100">{props.saleAmount}</p>
     </Link>
   );
 }

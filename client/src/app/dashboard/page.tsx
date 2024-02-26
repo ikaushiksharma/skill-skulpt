@@ -37,7 +37,7 @@ const cardData: CardProps[] = [
 type BarChartProps = { name: string; total: number[] };
 
 async function getData(id: string) {
-  axios.defaults.baseURL =process.env.NEXTAUTH_URL;
+  axios.defaults.baseURL = process.env.NEXTAUTH_URL;
   try {
     const { data } = await axios.get(`/api/user/${id}`);
     return data;
@@ -61,8 +61,9 @@ export default async function Home() {
   }
   return (
     <div className="flex flex-col gap-5  mx-auto max-w-7xl">
-      <h1 className="text-2xl font-semibold">{firstName}&apos;s Dashboard</h1>
-      <section className="grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
+      <h1 className="text-3xl font-semibold">{firstName}&apos;s Dashboard</h1>
+      <h6 className="text-base my-2 text-zinc-200">Your profile at glance.</h6>
+      {/* <section className="grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
         {cardData.map((d, i) => (
           <Card
             key={i}
@@ -72,7 +73,7 @@ export default async function Home() {
             label={d.label}
           />
         ))}
-      </section>
+      </section> */}
       <section className="grid grid-cols-1  gap-4 transition-all lg:grid-cols-2">
         <CardContent>
           <section className="pb-6 text-lg">

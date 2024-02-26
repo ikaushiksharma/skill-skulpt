@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import Hero from "@/components/home/hero-parallax";
+import Hero from "@/components/home/hero-page";
 
 export default function Page() {
   useEffect(() => {
