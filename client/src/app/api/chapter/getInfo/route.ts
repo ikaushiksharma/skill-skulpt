@@ -1,17 +1,11 @@
 import { db } from "@/lib/db";
 import { strict_output } from "@/lib/gpt";
 import { getQuestionsFromTranscript, getTranscript, searchYoutube } from "@/lib/youtube";
-import { strict } from "assert";
 import { NextResponse } from "next/server";
-import { resolve } from "path";
 import { z } from "zod";
-const { getChapterInfo } = require("@/lib/gpt");
 // api/chapter/getInfo
 
-// sleep for 0-4 seconds to simulate async behavior of real world api calls to database etc.
-
 const bodyParser = z.object({
-  // converting the body to a zod schema to validate it and get the types
   chapterId: z.string(),
 });
 // const sleep = async () =>
@@ -46,20 +40,15 @@ export async function POST(req: Request, res: Response) {
 
     // Get Youtube Video Id from Youtube Search Query
 
-    const videoId = await searchYoutube(chapter.youtubeSearchQuery)
-      .then((videoId) => {
-        return videoId;
-      })
-      .catch((error) => {
-        return "";
-      });
-    // const { result }: { result: string } = await strict_output(
-    //   "You are an AI capable of generating a article about a topic",
-    //   "Write an article in 300 words or less on the topic of " + chapter.youtubeSearchQuery,
-    //   { result: "article on given topic" },
-    // );
-    // const result = await getChapterInfo(chapter.name);
-    const result = await getTranscript(videoId);
+    const videoId = await searchYoutube(chapter.youtubeSearchQuery);
+
+    console.log(videoId);
+    const { result }: { result: string[] } = await strict_output(
+      "You are an AI capable of generating a article about a topic",
+      "Write a three paragraphs on the topic of " + chapter.name,
+      { result: "array of three paragraphs in json" },
+    );
+    console.log("I WAS PASSED FROM THIS", result);
 
     const questions = await getQuestionsFromTranscript(result, chapter.youtubeSearchQuery)
       .then((data) => {
@@ -70,19 +59,20 @@ export async function POST(req: Request, res: Response) {
         return [];
       });
 
+    console.log("QUESTIONS", questions);
     // create questions in database
-    // await db.question.createMany({
-    //   data: questions.map((question) => {
-    //     let options = [question.answer, question.option1, question.option2, question.option3];
-    //     options = options.sort(() => Math.random() - 0.5);
-    //     return {
-    //       question: question.question,
-    //       answer: question.answer,
-    //       options: JSON.stringify(options),
-    //       chapterId: chapterId,
-    //     };
-    //   }),
-    // });
+    await db.question.createMany({
+      data: questions.map((question) => {
+        let options = [question.answer, question.option1, question.option2, question.option3];
+        options = options.sort(() => Math.random() - 0.5);
+        return {
+          question: question.question,
+          answer: question.answer,
+          options: JSON.stringify(options),
+          chapterId: chapterId,
+        };
+      }),
+    });
 
     // Update Chapter in Database with videoId and summary
 
@@ -92,7 +82,7 @@ export async function POST(req: Request, res: Response) {
       },
       data: {
         videoId,
-        summary: result,
+        summary: result.join(" "),
       },
     });
 

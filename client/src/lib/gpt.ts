@@ -57,6 +57,7 @@ export async function strict_output(
       ],
     });
     let res: string = response.choices[0].message?.content?.replace(/'/g, "`") ?? "";
+    console.log(res);
     res = res.replace(/(\w)"(\w)/g, "$1'$2");
     res = res.replace(/(\w)```/g, "$1");
 
