@@ -1,8 +1,8 @@
-import { cn } from '@/lib/utils';
-import { Chapter, Course, Unit } from '@prisma/client';
-import Link from 'next/link';
-import { FC } from 'react';
-import { Separator } from './ui/separator';
+import { cn } from "@/lib/utils";
+import { Chapter, Course, Unit } from "@prisma/client";
+import Link from "next/link";
+import { FC } from "react";
+import { Separator } from "./ui/separator";
 
 interface CourseSideBarProps {
   course: Course & {
@@ -27,8 +27,8 @@ const CourseSideBar: FC<CourseSideBarProps> = async ({ course, currentChapterId 
                 <div key={chapter.id}>
                   <Link
                     href={`/course/${course.id}/${unitIndex}/${chapterIndex}`}
-                    className={cn('text-secondary-foreground/60', {
-                      'text-purple-500 font-bold': chapter.id === currentChapterId,
+                    className={cn("text-secondary-foreground/60", {
+                      "text-purple-500 font-bold": chapter.id === currentChapterId,
                     })}
                   >
                     {chapter.name}

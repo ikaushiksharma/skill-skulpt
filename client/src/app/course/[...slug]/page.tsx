@@ -45,26 +45,9 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
   if (!chapter) {
     return redirect("/gallery");
   }
-  const handleComplete = () => {};
 
   const nextChapter = unit.chapters[chapterIndex + 1];
   const prevChapter = unit.chapters[chapterIndex - 1];
-  /* return (
-    <pre className="mt-16">
-      {JSON.stringify(
-        {
-          courseId,
-          unitIndex,
-          chapterIndex,
-          course,
-          unit,
-          chapter,
-        },
-        null,
-        2,
-      )}
-    </pre>
-  ); */
 
   return (
     <div className="flex">
@@ -78,7 +61,7 @@ const CoursePage = async ({ params: { slug } }: CoursePageProps) => {
               unit={unit}
               unitIndex={unitIndex}
             />
-            {/* <QuizCards chapter={chapter} /> */}
+            <QuizCards chapter={chapter} />
           </div>
           <div className="flex-[1] flex flex-col h-[1px] mt-4 text-gray-500 bg-gray-500" />
           <div className="flex pb-8">

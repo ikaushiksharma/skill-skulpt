@@ -13,11 +13,9 @@ interface CreateChaptersProps {
 const CreateChapters: FC<CreateChaptersProps> = async ({ params: { courseId } }) => {
   const session = await getAuthSession();
   if (!session?.user) {
-    // show toast that user is not logged in and redirect to login page
     return redirect("/");
   }
 
-  //   Getting the course details by the courseId
 
   const course = await db.course.findUnique({
     where: {
@@ -32,12 +30,10 @@ const CreateChapters: FC<CreateChaptersProps> = async ({ params: { courseId } })
     },
   });
 
-  // If the course is not found then redirect to home page
   if (!course) {
     return redirect("/");
   }
 
-  //   return <pre>{JSON.stringify(course, null, 2)}</pre>;
   return (
     <div className="flex flex-col items-start max-w-xl mx-auto">
       <h5 className="text-sm uppercase text-secondary-foreground/60">
