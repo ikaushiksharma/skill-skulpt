@@ -1,5 +1,6 @@
 import { Chapter, Unit } from "@prisma/client";
 import React from "react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
 
 type Props = {
   chapter: Chapter;
@@ -22,8 +23,14 @@ const MainVideoSummary = ({ unit, unitIndex, chapter, chapterIndex }: Props) => 
         allowFullScreen
       />
       <div className="mt-4">
-        <h3 className="text-3xl font-semibold">Summary</h3>
-        <p className="mt-2 text-secondary-foreground/80">{chapter.summary}</p>
+        <p className="mt-2 text-secondary-foreground/80">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-2xl font-semibold">Summary</AccordionTrigger>
+              <AccordionContent>{chapter.summary}</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </p>
       </div>
     </div>
   );

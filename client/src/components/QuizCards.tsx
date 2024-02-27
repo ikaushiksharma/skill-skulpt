@@ -1,12 +1,12 @@
-'use client';
-import { Chapter, Question } from '@prisma/client';
+"use client";
+import { Chapter, Question } from "@prisma/client";
 
-import { Label } from './ui/label';
-import { Button } from './ui/button';
-import { ChevronRight } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { cn } from '@/lib/utils';
-import { useCallback, useState } from 'react';
+import { Label } from "./ui/label";
+import { Button } from "./ui/button";
+import { ChevronRight } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { cn } from "@/lib/utils";
+import { useCallback, useState } from "react";
 
 type Props = {
   chapter: Chapter & {
@@ -38,8 +38,11 @@ const QuizCards = ({ chapter }: Props) => {
 
   return (
     <div className="flex-[1] mt-16 ml-8">
-      <h1 className="text-2xl font-bold">Concept Check</h1>
+      <h1 className="text-3xl font-bold">Concept Check</h1>
       <div className="mt-2">
+        {chapter.questions.length === 0 && (
+          <p className="text-zinc-300 pt-4">No questions available</p>
+        )}
         {chapter.questions.map((question) => {
           const options = JSON.parse(question.options) as string[]; // this is the array of options for the question that we need to parse from the json string in the database
 
@@ -47,10 +50,10 @@ const QuizCards = ({ chapter }: Props) => {
           return (
             <div
               key={question.id}
-              className={cn('p-3 text-white mt-4 border border-secondary rounded-lg', {
-                'bg-green-600': questionState[question.id] === true,
-                'bg-red-600': questionState[question.id] === false,
-                'bg-secondary': questionState[question.id] === null,
+              className={cn("p-3 text-white mt-4 border border-secondary rounded-lg", {
+                "bg-green-600": questionState[question.id] === true,
+                "bg-red-600": questionState[question.id] === false,
+                "bg-secondary": questionState[question.id] === null,
               })}
             >
               <h1 className="text-lg font-semibold">{question.question}</h1>
@@ -79,10 +82,12 @@ const QuizCards = ({ chapter }: Props) => {
           );
         })}
       </div>
-      <Button className="w-full mt-2" size="lg" onClick={checkAnswer}>
-        Check Answer
-        <ChevronRight className="w-4 h-4 ml-1" />
-      </Button>
+      {chapter.questions.length > 0 && (
+        <Button className="w-full mt-2" size="lg" onClick={checkAnswer}>
+          Check Answer
+          <ChevronRight className="w-4 h-4 ml-1" />
+        </Button>
+      )}
     </div>
   );
 };

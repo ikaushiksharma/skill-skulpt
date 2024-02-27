@@ -94,3 +94,7 @@
 .no-visible-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.high {
+  @apply border border-red-500;
+}
