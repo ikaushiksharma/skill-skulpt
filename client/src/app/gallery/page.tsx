@@ -19,8 +19,8 @@ const GalleryPage = async ({}: GalleryPageProps) => {
     },
   });
   return (
-    <div className="mx-auto h-[100dvh] overflow-hidden py-24 max-w-screen-xl">
-      <div className="sticky z-20 w-full">
+    <div className="mx-auto py-24 max-w-screen-xl">
+      <div className="z-20 w-full">
         <h1 className="w-full py-12 text-3xl text-center font-bold sm:text-6xl">
           Our Curated Courses
         </h1>
