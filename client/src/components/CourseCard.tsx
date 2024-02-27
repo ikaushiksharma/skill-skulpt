@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FollowerPointerCard } from "./following-pointer";
 import Link from "next/link";
+import { useId } from "react";
 
 export default function CourseCard({
   id,
@@ -33,7 +34,9 @@ export default function CourseCard({
           <div className=" p-4">
             <h2 className="font-bold my-4 text-lg text-zinc-100 dark:text-zinc-700">{title}</h2>
             {description.map((desc, index) => (
-              <p className="font-normal my-1 text-sm text-zinc-300 dark:text-zinc-500">{desc}</p>
+              <p key={index} className="font-normal my-1 text-sm text-zinc-300 dark:text-zinc-500">
+                {desc}
+              </p>
             ))}
             <div className="flex flex-row justify-between items-center mt-10">
               <span className="text-sm text-gray-500">{date}</span>
