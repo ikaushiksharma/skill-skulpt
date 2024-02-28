@@ -1,7 +1,13 @@
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
 import { htmlTemplate } from "../utils";
-export async function sendMail(email: string, userId: string, courseId: string) {
+export async function sendMail(
+  email: string,
+  userName: string,
+  courseName: string,
+  userId: string,
+  courseId: string,
+) {
   const transport = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -13,7 +19,7 @@ export async function sendMail(email: string, userId: string, courseId: string) 
     from: process.env.NODEMAILER_EMAIL,
     to: email,
     subject: `Successfully Registered!🚀`,
-    html: htmlTemplate(email, userId, courseId),
+    html: htmlTemplate(email, userName, courseName),
     // attachments: [
     //   {
     //     filename: "certificate.jpg",

@@ -47,8 +47,9 @@ export async function POST(req: Request, res: Response) {
           id: userId,
         },
       });
+      const course = await db.course.findUnique({ where: { id: courseId } });
       console.log("SENDING MAIL");
-      await sendMail(user?.email + "", userId, courseId);
+      await sendMail(user?.email + "", user?.image, course?.name, userId, courseId);
       console.log("SENT MAIL");
     }
 
