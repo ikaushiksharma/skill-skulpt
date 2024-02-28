@@ -49,7 +49,7 @@ export async function POST(req: Request, res: Response) {
       });
       const course = await db.course.findUnique({ where: { id: courseId } });
       console.log("SENDING MAIL");
-      await sendMail(user?.email + "", user?.name + "", course?.name+"", userId, courseId);
+      await sendMail(user?.email + "", user?.name + "", course?.name + "", userId, courseId);
       console.log("SENT MAIL");
     }
 
