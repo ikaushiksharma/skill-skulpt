@@ -27,7 +27,7 @@ margin: 20px;">
 Certificate of Completion
 </div>
 
-<div style="margin: 20px;">
+<div style="margin: 20px;color:white;">
 This certificate is presented to
 </div>
 
@@ -39,7 +39,7 @@ width: 400px;">
 ${userName}
 </div>
 
-<div style="margin: 20px;">
+<div style="margin: 20px;color:white">
 For completing the course on<br/>
 ${courseName}
 </div>
