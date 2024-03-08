@@ -1,9 +1,7 @@
 import axios from "axios";
-import { YoutubeTranscript } from "youtube-transcript";
 import { strict_output } from "./gpt";
 
 export async function searchYoutube(searchQuery: string) {
-  // hello world --> hello+world
   searchQuery = encodeURIComponent(searchQuery);
   try {
     const { data } = await axios.get(
@@ -12,23 +10,6 @@ export async function searchYoutube(searchQuery: string) {
     return data.items[0].id.videoId;
   } catch (error) {
     return null;
-  }
-}
-
-// get transcript from youtube video Id
-export async function getTranscript(videoId: string) {
-  try {
-    let transcript_arr = await YoutubeTranscript.fetchTranscript(videoId, {
-      lang: "en",
-      country: "EN",
-    });
-    let transcript = "";
-    for (let t of transcript_arr) {
-      transcript += t.text + " ";
-    }
-    return transcript.replaceAll("\n", " ");
-  } catch (error) {
-    return "";
   }
 }
 

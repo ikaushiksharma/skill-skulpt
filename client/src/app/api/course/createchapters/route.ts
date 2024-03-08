@@ -29,10 +29,12 @@ export async function POST(req: Request, res: Response) {
         chapter_title: string;
       }[];
     }[];
+    let length = units.length;
+    if (length == 0) length = 1;
     // Prompt engineering 😎
     let output_units: outputUnits = await strict_output(
       "You are an AI capable of curating course content, coming up with relevant chapter titles, and finding best relevant youtube videos for each chapter",
-      new Array(units.length).fill(
+      new Array(length).fill(
         `It is your job to create a course about ${title}. The user has requested to create chapters for each of the units. Then, for each chapter, provide a detailed youtube search query that can be used to find an informative educationalvideo for each chapter. Each query should give best educational informative course in youtube.`,
       ),
       {
@@ -41,8 +43,6 @@ export async function POST(req: Request, res: Response) {
           "an array of chapters, each chapter should have a youtube_search_query and a chapter_title key in the JSON object",
       },
     );
-    // console.log(output_units);
-    // return NextResponse.json(output_units); // returning next response with the output
     const imageSearchTerm = await strict_output(
       "you are an AI capable of finding the most relevant image for a course",
       `Please provide a good image search term for the title of a course about ${title}. This search term will be fed into the unsplash API, so make sure it is a good search term that will return good results`,
@@ -54,7 +54,7 @@ export async function POST(req: Request, res: Response) {
     // return NextResponse.json({ course_image });
     // Now create the course in the database
     const course = await db.course.create({
-      data: { 
+      data: {
         authorId: session.user.id,
         totalChapters: output_units.reduce((acc, unit) => acc + unit.chapters.length, 0),
         name: title,
